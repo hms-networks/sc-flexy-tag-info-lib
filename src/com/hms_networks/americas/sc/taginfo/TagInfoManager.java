@@ -340,5 +340,15 @@ public class TagInfoManager {
 
     return highestTagIdSeen;
   }
+
+  /**
+   * Get a boolean value representing if the tag info list has been populated by calling {@link
+   * #refreshTagList()}.
+   *
+   * @return true if tag info list populated
+   */
+  public boolean isTagInfoListPopulated() {
+    return tagInfoList != null;
+  }
 }
 
