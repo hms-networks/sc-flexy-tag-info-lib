@@ -314,7 +314,7 @@ public class TagInfoManager {
    *
    * @return lowest tag ID seen
    */
-  public int getLowestTagIdSeen() {
+  public static int getLowestTagIdSeen() {
     // Verify lowest tag ID seen variable is set
     if (lowestTagIdSeen == TagConstants.UNINIT_INT_VAL) {
       throw new IllegalStateException(
@@ -331,7 +331,7 @@ public class TagInfoManager {
    *
    * @return highest tag ID seen
    */
-  public int getHighestTagIdSeen() {
+  public static int getHighestTagIdSeen() {
     // Verify lowest tag ID seen variable is set
     if (lowestTagIdSeen == TagConstants.UNINIT_INT_VAL) {
       throw new IllegalStateException(
@@ -347,7 +347,7 @@ public class TagInfoManager {
    *
    * @return true if tag info list populated
    */
-  public boolean isTagInfoListPopulated() {
+  public synchronized static boolean isTagInfoListPopulated() {
     return tagInfoList != null;
   }
 }
