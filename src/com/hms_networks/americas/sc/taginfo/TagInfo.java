@@ -15,7 +15,7 @@ public class TagInfo {
   /**
    * Tag type
    */
-  private final int type;
+  private final TagType type;
 
   /**
    * Boolean if historical logging enabled
@@ -57,7 +57,7 @@ public class TagInfo {
       boolean isInGroupB,
       boolean isInGroupC,
       boolean isInGroupD,
-      int type) {
+      TagType type) {
     this.type = type;
     this.historicalLogEnabled = historicalLogEnabled;
     this.id = id;
@@ -87,7 +87,7 @@ public class TagInfo {
    * @param tagGroups list of tag groups
    * @param type tag type
    */
-  public TagInfo(int id, String name, boolean historicalLogEnabled, ArrayList tagGroups, int type) {
+  public TagInfo(int id, String name, boolean historicalLogEnabled, ArrayList tagGroups, TagType type) {
     this.type = type;
     this.historicalLogEnabled = historicalLogEnabled;
     this.id = id;
@@ -109,7 +109,7 @@ public class TagInfo {
    *
    * @return tag type
    */
-  public int getType() {
+  public TagType getType() {
     return type;
   }
 

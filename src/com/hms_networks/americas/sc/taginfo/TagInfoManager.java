@@ -196,9 +196,12 @@ public class TagInfoManager {
         case indexType:
           tagType = Integer.parseInt(currentToken);
 
+          // Convert tag type integer to object
+          TagType tagTypeObj = TagType.getTagTypeFromInt(tagType);
+
           // Type is the last index, form TagInfo object
           TagInfo currentTagInfo = new TagInfo(tagId, tagName, tagHistoricalLoggingEnabled,
-              tagInGroupA, tagInGroupB, tagInGroupC, tagInGroupD, tagType);
+              tagInGroupA, tagInGroupB, tagInGroupC, tagInGroupD, tagTypeObj);
           tagInfoList[tagInfoListInsertIndex] = currentTagInfo;
           tagInfoListInsertIndex++;
           break;
