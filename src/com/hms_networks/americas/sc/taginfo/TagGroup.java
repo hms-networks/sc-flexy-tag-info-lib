@@ -9,11 +9,6 @@ package com.hms_networks.americas.sc.taginfo;
 public class TagGroup {
 
   /**
-   * Integer assigned to represent no tag group.
-   */
-  private static final int GROUP_NONE_INT = -1;
-
-  /**
    * Integer assigned to represent tag group A.
    */
   private static final int GROUP_A_INT = 0;
@@ -32,11 +27,6 @@ public class TagGroup {
    * Integer assigned to represent tag group D.
    */
   private static final int GROUP_D_INT = 3;
-
-  /**
-   * Public instance of {@link TagGroup} representing no tag group.
-   */
-  public static final TagGroup NONE = new TagGroup(GROUP_NONE_INT);
 
   /**
    * Public instance of {@link TagGroup} representing tag group A.
