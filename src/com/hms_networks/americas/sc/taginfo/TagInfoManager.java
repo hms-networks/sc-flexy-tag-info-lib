@@ -29,14 +29,10 @@ public class TagInfoManager {
    */
   private static int tagInfoListInsertIndex = 0;
 
-  /**
-   * The lowest tag ID seen during the previous call to {@link #refreshTagList()}.
-   */
+  /** The lowest tag ID seen during the previous call to {@link #refreshTagList()}. */
   private static int lowestTagIdSeen = TagConstants.UNINIT_INT_VAL;
 
-  /**
-   * The highest tag ID seen during the previous call to {@link #refreshTagList()}.
-   */
+  /** The highest tag ID seen during the previous call to {@link #refreshTagList()}. */
   private static int highestTagIdSeen = TagConstants.UNINIT_INT_VAL;
 
   /**
@@ -45,7 +41,7 @@ public class TagInfoManager {
    *
    * @throws IOException if EDB fails
    */
-  public synchronized static void refreshTagList() throws IOException {
+  public static synchronized void refreshTagList() throws IOException {
     // Create tagInfoList of size = number of Flexy tags
     tagInfoList = new TagInfo[IOManager.getNbTags()];
     tagInfoListInsertIndex = 0;
@@ -106,7 +102,7 @@ public class TagInfoManager {
    * Parse the specified line from the tag information EBD data generated in {@link
    * #refreshTagList()}. Add the parse tag information to the tag information list.
    */
-  private synchronized static void processTagListEBDLine(byte[] line) {
+  private static synchronized void processTagListEBDLine(byte[] line) {
     /*
      * Token indices
      * index 0 - tag ID
@@ -200,15 +196,21 @@ public class TagInfoManager {
           TagType tagTypeObj = TagType.getTagTypeFromInt(tagType);
 
           // Type is the last index, form TagInfo object
-          TagInfo currentTagInfo = new TagInfo(tagId, tagName, tagHistoricalLoggingEnabled,
-              tagInGroupA, tagInGroupB, tagInGroupC, tagInGroupD, tagTypeObj);
+          TagInfo currentTagInfo =
+              new TagInfo(
+                  tagId,
+                  tagName,
+                  tagHistoricalLoggingEnabled,
+                  tagInGroupA,
+                  tagInGroupB,
+                  tagInGroupC,
+                  tagInGroupD,
+                  tagTypeObj);
           tagInfoList[tagInfoListInsertIndex] = currentTagInfo;
           tagInfoListInsertIndex++;
           break;
-
       }
     }
-
   }
 
   /**
@@ -227,7 +229,7 @@ public class TagInfoManager {
    *
    * @return populated tag information list
    */
-  public synchronized static List getTagInfoList() {
+  public static synchronized List getTagInfoList() {
     // Verify tag info list has been populated
     if (tagInfoList == null) {
       throw new IllegalStateException(
@@ -245,7 +247,7 @@ public class TagInfoManager {
    * @param tagGroups tag groups to include
    * @return filtered tag information list
    */
-  public synchronized static List getTagInfoListFiltered(List tagGroups) {
+  public static synchronized List getTagInfoListFiltered(List tagGroups) {
     // Verify tag info list has been populated
     if (tagInfoList == null) {
       throw new IllegalStateException(
@@ -294,7 +296,7 @@ public class TagInfoManager {
    * @param tagGroups tag groups to include
    * @return filtered tag information list
    */
-  public synchronized static List getTagInfoListFiltered(TagGroup[] tagGroups) {
+  public static synchronized List getTagInfoListFiltered(TagGroup[] tagGroups) {
     return getTagInfoListFiltered(Arrays.asList(tagGroups));
   }
 
@@ -306,8 +308,8 @@ public class TagInfoManager {
    * @param tagGroup tag group to include
    * @return filtered tag information list
    */
-  public synchronized static List getTagInfoListFiltered(TagGroup tagGroup) {
-    return getTagInfoListFiltered(new TagGroup[]{tagGroup});
+  public static synchronized List getTagInfoListFiltered(TagGroup tagGroup) {
+    return getTagInfoListFiltered(new TagGroup[] {tagGroup});
   }
 
   /**
@@ -350,8 +352,7 @@ public class TagInfoManager {
    *
    * @return true if tag info list populated
    */
-  public synchronized static boolean isTagInfoListPopulated() {
+  public static synchronized boolean isTagInfoListPopulated() {
     return tagInfoList != null;
   }
 }
-
