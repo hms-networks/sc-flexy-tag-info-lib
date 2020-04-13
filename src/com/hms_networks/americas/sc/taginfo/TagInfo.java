@@ -12,29 +12,19 @@ import java.util.List;
  */
 public class TagInfo {
 
-  /**
-   * Tag type
-   */
+  /** Tag type */
   private final TagType type;
 
-  /**
-   * Boolean if historical logging enabled
-   */
+  /** Boolean if historical logging enabled */
   private final boolean historicalLogEnabled;
 
-  /**
-   * Tag ID
-   */
+  /** Tag ID */
   private final int id;
 
-  /**
-   * Tag name
-   */
+  /** Tag name */
   private final String name;
 
-  /**
-   * List of tag groups
-   */
+  /** List of tag groups */
   private final ArrayList tagGroups;
 
   /**
@@ -87,7 +77,8 @@ public class TagInfo {
    * @param tagGroups list of tag groups
    * @param type tag type
    */
-  public TagInfo(int id, String name, boolean historicalLogEnabled, ArrayList tagGroups, TagType type) {
+  public TagInfo(
+      int id, String name, boolean historicalLogEnabled, ArrayList tagGroups, TagType type) {
     this.type = type;
     this.historicalLogEnabled = historicalLogEnabled;
     this.id = id;

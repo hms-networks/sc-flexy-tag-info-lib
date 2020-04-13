@@ -8,56 +8,38 @@ package com.hms_networks.americas.sc.taginfo;
  */
 public class TagGroup {
 
-  /**
-   * Integer assigned to represent tag group A.
-   */
+  /** Integer assigned to represent tag group A. */
   private static final int GROUP_A_INT = 0;
 
-  /**
-   * Integer assigned to represent tag group B.
-   */
+  /** Integer assigned to represent tag group B. */
   private static final int GROUP_B_INT = 1;
 
-  /**
-   * Integer assigned to represent tag group C.
-   */
+  /** Integer assigned to represent tag group C. */
   private static final int GROUP_C_INT = 2;
 
-  /**
-   * Integer assigned to represent tag group D.
-   */
+  /** Integer assigned to represent tag group D. */
   private static final int GROUP_D_INT = 3;
 
-  /**
-   * Public instance of {@link TagGroup} representing tag group A.
-   */
+  /** Public instance of {@link TagGroup} representing tag group A. */
   public static final TagGroup A = new TagGroup(GROUP_A_INT);
 
-  /**
-   * Public instance of {@link TagGroup} representing tag group B.
-   */
+  /** Public instance of {@link TagGroup} representing tag group B. */
   public static final TagGroup B = new TagGroup(GROUP_B_INT);
 
-  /**
-   * Public instance of {@link TagGroup} representing tag group C.
-   */
+  /** Public instance of {@link TagGroup} representing tag group C. */
   public static final TagGroup C = new TagGroup(GROUP_C_INT);
 
-  /**
-   * Public instance of {@link TagGroup} representing tag group D.
-   */
+  /** Public instance of {@link TagGroup} representing tag group D. */
   public static final TagGroup D = new TagGroup(GROUP_D_INT);
 
-  /**
-   * Instance tag group integer
-   */
+  /** Instance tag group integer */
   private final int groupID;
 
   /**
    * Private (internal) constructor for creating an instance of {@link TagGroup} with a tag group
    * integer.
-   * <p>
-   * Note: Tag group integers shall be unique.
+   *
+   * <p>Note: Tag group integers shall be unique.
    *
    * @param groupID integer to represent tag group
    */
