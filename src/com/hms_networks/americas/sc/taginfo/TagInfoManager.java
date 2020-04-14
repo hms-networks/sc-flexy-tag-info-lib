@@ -271,8 +271,8 @@ public class TagInfoManager {
 
       // Check if tag belongs to a filter
       boolean filterMatch = false;
-      for (int i = 0; i < tagGroups.size(); i++) {
-        if (currentTagGroups.contains(tagGroups.get(i))) {
+      for (int x = 0; x < tagGroups.size(); x++) {
+        if (currentTagGroups.contains(tagGroups.get(x))) {
           filterMatch = true;
         }
       }
