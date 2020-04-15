@@ -8,42 +8,51 @@ package com.hms_networks.americas.sc.taginfo;
  */
 public class TagGroup {
 
-  /** Integer assigned to represent tag group A. */
-  private static final int GROUP_A_INT = 0;
+  /** String assigned to represent tag group A. */
+  private static final String GROUP_A_STR = "A";
 
-  /** Integer assigned to represent tag group B. */
-  private static final int GROUP_B_INT = 1;
+  /** String assigned to represent tag group B. */
+  private static final String GROUP_B_STR = "B";
 
-  /** Integer assigned to represent tag group C. */
-  private static final int GROUP_C_INT = 2;
+  /** String assigned to represent tag group C. */
+  private static final String GROUP_C_STR = "C";
 
-  /** Integer assigned to represent tag group D. */
-  private static final int GROUP_D_INT = 3;
+  /** String assigned to represent tag group D. */
+  private static final String GROUP_D_STR = "D";
 
   /** Public instance of {@link TagGroup} representing tag group A. */
-  public static final TagGroup A = new TagGroup(GROUP_A_INT);
+  public static final TagGroup A = new TagGroup(GROUP_A_STR);
 
   /** Public instance of {@link TagGroup} representing tag group B. */
-  public static final TagGroup B = new TagGroup(GROUP_B_INT);
+  public static final TagGroup B = new TagGroup(GROUP_B_STR);
 
   /** Public instance of {@link TagGroup} representing tag group C. */
-  public static final TagGroup C = new TagGroup(GROUP_C_INT);
+  public static final TagGroup C = new TagGroup(GROUP_C_STR);
 
   /** Public instance of {@link TagGroup} representing tag group D. */
-  public static final TagGroup D = new TagGroup(GROUP_D_INT);
+  public static final TagGroup D = new TagGroup(GROUP_D_STR);
 
-  /** Instance tag group integer */
-  private final int groupID;
+  /** Instance tag group string */
+  private final String groupLetter;
 
   /**
    * Private (internal) constructor for creating an instance of {@link TagGroup} with a tag group
-   * integer.
+   * letter.
    *
-   * <p>Note: Tag group integers shall be unique.
+   * <p>Note: Tag group letter shall be unique.
    *
-   * @param groupID integer to represent tag group
+   * @param groupLetter letter to represent tag group
    */
-  private TagGroup(int groupID) {
-    this.groupID = groupID;
+  private TagGroup(String groupLetter) {
+    this.groupLetter = groupLetter;
+  }
+
+  /**
+   * Get the tag group letter as a string.
+   *
+   * @return tag group string
+   */
+  public String toString() {
+    return groupLetter;
   }
 }
