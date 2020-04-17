@@ -80,6 +80,7 @@ public class TagInfoManager {
 
         // Reached end of line. Reset byte received array
         receivedBytes = new byte[maxBytesPerLine];
+        receivedBytesInsertIndex = 0;
       }
 
       /*
