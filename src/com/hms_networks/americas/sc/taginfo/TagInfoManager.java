@@ -1,7 +1,9 @@
 package com.hms_networks.americas.sc.taginfo;
 
+import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.Exporter;
 import com.ewon.ewonitf.IOManager;
+import com.ewon.ewonitf.SysControlBlock;
 import com.hms_networks.americas.sc.string.QuoteSafeStringTokenizer;
 
 import java.io.IOException;
@@ -355,5 +357,46 @@ public class TagInfoManager {
    */
   public static synchronized boolean isTagInfoListPopulated() {
     return tagInfoList != null;
+  }
+
+  /**
+   * Applies the specified log interval to the specified tag.
+   *
+   * @param tagName name of tag to modify
+   * @param logInterval new historical log interval
+   * @throws EWException if unable to apply historical log interval
+   */
+  public static void applyHistoricalLogRateForTag(String tagName, String logInterval)
+      throws EWException {
+    SysControlBlock SCB = new SysControlBlock(SysControlBlock.TAG, tagName);
+    SCB.setItem("LogEnabled", "1");
+    SCB.setItem("LogTimer", logInterval);
+    SCB.saveBlock();
+  }
+
+  /**
+   * Applies the specified historical log interval to tags in the specified tag group. To reduce the
+   * time waiting for this method to return, it is recommended that this method be called from a new
+   * {@link Thread}.
+   *
+   * @param tagGroup tag group to modify
+   * @param logInterval new historical log interval
+   * @throws EWException if unable to apply historical log interval
+   * @throws InterruptedException if unable to sleep between updating tags
+   */
+  public static void applyHistoricalLogRateForTagGroup(
+      final TagGroup tagGroup, final String logInterval) throws EWException, InterruptedException {
+    // Define constant number of milliseconds to wait between applying each log intervals
+    final long millisToWaitBetweenTags = 10;
+
+    // Get list of tags in group
+    List tagsInGroup = getTagInfoListFiltered(tagGroup);
+
+    // For each tag in group, apply log interval and sleep
+    for (int x = 0; x < tagsInGroup.size(); x++) {
+      TagInfo currentTagInfo = (TagInfo) tagsInGroup.get(x);
+      applyHistoricalLogRateForTag(currentTagInfo.getName(), logInterval);
+      Thread.sleep(millisToWaitBetweenTags);
+    }
   }
 }
