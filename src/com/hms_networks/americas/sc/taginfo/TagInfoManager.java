@@ -107,7 +107,8 @@ public class TagInfoManager {
         Logger.LOG_WARN(
             "There are "
                 + numTagIdGaps
-                + " gaps in tag ID numbers. For optimal performance, it is recommended that there be no more than "
+                + " gaps in tag ID numbers. For optimal performance, it is recommended that there"
+                + " be no more than "
                 + TagConstants.TAG_ID_GAPS_WARNING_THRESHOLD
                 + " gaps. To resolve tag ID number gaps, a reset of the Ewon must be performed.");
       }
