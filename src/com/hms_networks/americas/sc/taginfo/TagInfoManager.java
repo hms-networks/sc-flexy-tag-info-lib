@@ -265,6 +265,22 @@ public class TagInfoManager {
   }
 
   /**
+   * Gets the tag info array populated by calling {@link #refreshTagList()}. If this method is
+   * called before {@link #refreshTagList()}, an {@link IllegalStateException} will be thrown.
+   *
+   * @return populated tag information array
+   */
+  public static synchronized TagInfo[] getTagInfoArray() {
+    // Verify tag info list has been populated
+    if (tagInfoList == null) {
+      throw new IllegalStateException(
+          "Cannot get tag information list before calling refreshTagList()");
+    }
+
+    return tagInfoList;
+  }
+
+  /**
    * Gets the tag info list populated by calling {@link #refreshTagList()}. If this method is called
    * before {@link #refreshTagList()}, an {@link IllegalStateException} will be thrown.
    *
