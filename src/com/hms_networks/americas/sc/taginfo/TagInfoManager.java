@@ -6,7 +6,6 @@ import com.ewon.ewonitf.IOManager;
 import com.ewon.ewonitf.SysControlBlock;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.QuoteSafeStringTokenizer;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
