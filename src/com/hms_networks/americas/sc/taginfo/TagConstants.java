@@ -19,4 +19,7 @@ public class TagConstants {
 
   /** End of stream marker used in EBD files/calls. */
   public static final int TAG_EBD_END_OF_STREAM = -1;
+
+  /** The threshold for the number of tag ID gaps before showing a warning message. */
+  public static final int TAG_ID_GAPS_WARNING_THRESHOLD = 500;
 }

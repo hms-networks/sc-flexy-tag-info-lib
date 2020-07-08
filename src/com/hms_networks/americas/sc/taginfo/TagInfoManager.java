@@ -4,6 +4,7 @@ import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.Exporter;
 import com.ewon.ewonitf.IOManager;
 import com.ewon.ewonitf.SysControlBlock;
+import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.QuoteSafeStringTokenizer;
 
 import java.io.IOException;
@@ -97,8 +98,45 @@ public class TagInfoManager {
       }
     }
 
+    // Correct tag info array for gaps
+    final int tagIdDiff = highestTagIdSeen - lowestTagIdSeen;
+    final int numTagIdGaps = tagIdDiff - IOManager.getNbTags();
+    if (numTagIdGaps > 0) {
+      // Show warning if tag gaps above threshold
+      if (numTagIdGaps >= TagConstants.TAG_ID_GAPS_WARNING_THRESHOLD) {
+        Logger.LOG_WARN(
+            "There are "
+                + numTagIdGaps
+                + " gaps in tag ID numbers. For optimal performance, it is recommended that there be no more than "
+                + TagConstants.TAG_ID_GAPS_WARNING_THRESHOLD
+                + " gaps. To resolve tag ID number gaps, a reset of the Ewon must be performed.");
+      }
+
+      // Rebuild list with gaps
+      Logger.LOG_DEBUG(
+          "Tag ID gaps have been detected. Rebuilding tag information list with correct gaps...");
+      rebuildInitialTagInfoListWithGaps();
+      Logger.LOG_DEBUG("Finished rebuilding tag information list with correct gaps.");
+    }
+
     // Flag for garbage collection
     System.gc();
+  }
+
+  /** Rebuilds the initial tag information list to account for indexing with tag ID number gaps. */
+  private static synchronized void rebuildInitialTagInfoListWithGaps() {
+    // Store original list to to iterate
+    TagInfo[] originalList = tagInfoList;
+
+    // Create new list with size
+    final int tagIdDiff = highestTagIdSeen - lowestTagIdSeen;
+    tagInfoList = new TagInfo[tagIdDiff + 1];
+
+    // Move objects from original list to new list
+    for (int x = 0; x < originalList.length; x++) {
+      final int offsetTagId = originalList[x].getId() - lowestTagIdSeen;
+      tagInfoList[offsetTagId] = originalList[x];
+    }
   }
 
   /**
