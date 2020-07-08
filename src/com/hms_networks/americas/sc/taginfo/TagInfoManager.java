@@ -142,6 +142,8 @@ public class TagInfoManager {
   /**
    * Parse the specified line from the tag information EBD data generated in {@link
    * #refreshTagList()}. Add the parse tag information to the tag information list.
+   *
+   * @param line EBD line bytes
    */
   private static synchronized void processTagListEBDLine(byte[] line) {
     /*
