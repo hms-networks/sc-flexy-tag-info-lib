@@ -98,7 +98,7 @@ public class TagInfoManager {
     }
 
     // Correct tag info array for gaps
-    final int tagIdDiff = highestTagIdSeen - lowestTagIdSeen - 1;
+    final int tagIdDiff = highestTagIdSeen - lowestTagIdSeen + 1;
     final int numTagIdGaps = tagIdDiff - IOManager.getNbTags();
     if (numTagIdGaps > 0) {
       // Show warning if tag gaps above threshold
