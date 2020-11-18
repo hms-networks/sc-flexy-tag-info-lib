@@ -380,6 +380,28 @@ public class TagInfoManager {
   }
 
   /**
+   * Gets a filtered tag info list containing only tags from the tag info list that are in the
+   * specified tag group and have real time logging enabled. If this method is called before {@link
+   * #refreshTagList()}, an {@link IllegalStateException} will be thrown.
+   *
+   * @param tagGroup tag group to include
+   * @return filtered real time tag information list
+   */
+  public static ArrayList getRealTimeTagInfoListFiltered(TagGroup tagGroup) {
+    ArrayList allTags = (ArrayList) getTagInfoListFiltered(tagGroup);
+    ArrayList realTimeTags = new ArrayList();
+    if (allTags != null) {
+      for (int i = 0; i < allTags.size(); i++) {
+        TagInfo tag = (TagInfo) allTags.get(i);
+        if (tag.isRealTimeLogEnabled()) {
+          realTimeTags.add(tag);
+        }
+      }
+    }
+    return realTimeTags;
+  }
+
+  /**
    * Gets the lowest tag ID seen during the previous call to {@link #refreshTagList()}. If this
    * method is called before {@link #refreshTagList()}, an {@link IllegalStateException} will be
    * thrown.
