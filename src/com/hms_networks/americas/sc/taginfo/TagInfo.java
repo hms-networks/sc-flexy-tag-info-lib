@@ -18,6 +18,9 @@ public class TagInfo {
   /** Boolean if historical logging enabled */
   private final boolean historicalLogEnabled;
 
+  /** Boolean if real time logging enabled */
+  private final boolean realTimeLogEnabled;
+
   /** Tag ID */
   private final int id;
 
@@ -43,6 +46,7 @@ public class TagInfo {
       int id,
       String name,
       boolean historicalLogEnabled,
+      boolean realTimeLogEnabled,
       boolean isInGroupA,
       boolean isInGroupB,
       boolean isInGroupC,
@@ -50,6 +54,7 @@ public class TagInfo {
       TagType type) {
     this.type = type;
     this.historicalLogEnabled = historicalLogEnabled;
+    this.realTimeLogEnabled = realTimeLogEnabled;
     this.id = id;
     this.name = name;
     this.tagGroups = new ArrayList();
@@ -78,9 +83,15 @@ public class TagInfo {
    * @param type tag type
    */
   public TagInfo(
-      int id, String name, boolean historicalLogEnabled, ArrayList tagGroups, TagType type) {
+      int id,
+      String name,
+      boolean historicalLogEnabled,
+      boolean realTimeLogEnabled,
+      ArrayList tagGroups,
+      TagType type) {
     this.type = type;
     this.historicalLogEnabled = historicalLogEnabled;
+    this.realTimeLogEnabled = realTimeLogEnabled;
     this.id = id;
     this.name = name;
     this.tagGroups = tagGroups;
@@ -120,6 +131,15 @@ public class TagInfo {
    */
   public boolean isHistoricalLogEnabled() {
     return historicalLogEnabled;
+  }
+
+  /**
+   * Get if the tag real time logging is enabled
+   *
+   * @return true if real time logging enabled
+   */
+  public boolean isRealTimeLogEnabled() {
+    return realTimeLogEnabled;
   }
 
   /**

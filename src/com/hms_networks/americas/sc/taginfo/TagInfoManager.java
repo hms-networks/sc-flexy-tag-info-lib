@@ -152,6 +152,7 @@ public class TagInfoManager {
      * index 0 - tag ID
      * index 1 - name
      * index 8 - historical logging enabled
+     * index 15 - real time logging enabled
      * index 25 - in tag group A
      * index 26 - in tag group B
      * index 27 - in tag group C
@@ -162,6 +163,7 @@ public class TagInfoManager {
     final int indexTagId = 0;
     final int indexName = 1;
     final int indexHistoricalLogging = 8;
+    final int indexRealTimeLogging = 15;
     final int indexGroupA = 25;
     final int indexGroupB = 26;
     final int indexGroupC = 27;
@@ -178,6 +180,7 @@ public class TagInfoManager {
     boolean tagInGroupC = false;
     boolean tagInGroupD = false;
     boolean tagHistoricalLoggingEnabled = false;
+    boolean tagRealTimeLoggingEnabled = false;
 
     // Convert line to string
     String lineFromBytes = new String(line);
@@ -221,6 +224,9 @@ public class TagInfoManager {
         case indexHistoricalLogging:
           tagHistoricalLoggingEnabled = convertStrToBool(currentToken);
           break;
+        case indexRealTimeLogging:
+          tagRealTimeLoggingEnabled = convertStrToBool(currentToken);
+          break;
         case indexGroupA:
           tagInGroupA = convertStrToBool(currentToken);
           break;
@@ -245,6 +251,7 @@ public class TagInfoManager {
                   tagId,
                   tagName,
                   tagHistoricalLoggingEnabled,
+                  tagRealTimeLoggingEnabled,
                   tagInGroupA,
                   tagInGroupB,
                   tagInGroupC,
