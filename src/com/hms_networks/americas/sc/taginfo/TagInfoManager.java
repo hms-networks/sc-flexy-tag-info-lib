@@ -334,19 +334,21 @@ public class TagInfoManager {
     for (int i = 0; i < tagInfoListInsertIndex; i++) {
       // Get tag at array index and its group
       TagInfo currentTagInfo = tagInfoList[i];
-      List currentTagGroups = currentTagInfo.getTagGroups();
+      if (currentTagInfo != null) {
+        List currentTagGroups = currentTagInfo.getTagGroups();
 
-      // Check if tag belongs to a filter
-      boolean filterMatch = false;
-      for (int x = 0; x < tagGroups.size(); x++) {
-        if (currentTagGroups.contains(tagGroups.get(x))) {
-          filterMatch = true;
+        // Check if tag belongs to a filter
+        boolean filterMatch = false;
+        for (int x = 0; x < tagGroups.size(); x++) {
+          if (currentTagGroups.contains(tagGroups.get(x))) {
+            filterMatch = true;
+          }
         }
-      }
 
-      // If tag is in desired group(s), add to filtered tag info list
-      if (filterMatch) {
-        filteredTagInfoList.add(currentTagInfo);
+        // If tag is in desired group(s), add to filtered tag info list
+        if (filterMatch) {
+          filteredTagInfoList.add(currentTagInfo);
+        }
       }
     }
 
