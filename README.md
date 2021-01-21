@@ -17,7 +17,7 @@ A library for accessing and storing tag information on Ewon Flexy.
 
 ## [Developer Documentation](#table-of-contents)
 
-Developer documentation is available in Javadoc format at [https://hms-networks.github.io/sc-flexy-tag-info-lib/index.html](https://hms-networks.github.io/sc-flexy-tag-info-lib/index.html).
+Developer documentation is available in Javadoc format found in the release package [https://github.com/hms-networks/sc-flexy-tag-info-lib/releases](https://github.com/hms-networks/sc-flexy-tag-info-lib/releases).
 
 ## [Dependencies](#table-of-contents)
 1. [sc-flexy-string-lib](https://github.com/hms-networks/sc-flexy-string-lib)
