@@ -1,16 +1,15 @@
 package com.hms_networks.americas.sc.taginfo;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.Exporter;
 import com.ewon.ewonitf.IOManager;
 import com.ewon.ewonitf.SysControlBlock;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.QuoteSafeStringTokenizer;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class that allows the retrieval of tag information of an Ewon Flexy by generating an export block
