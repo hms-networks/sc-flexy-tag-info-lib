@@ -41,11 +41,15 @@ public class TagInfoManager {
   /** Initial capacity for byte stream buffer. */
   private static final int INITIAL_CAPACITY_BYTES = 1000;
 
+  /** Maximum capacity for byte stream buffer. */
+  private static final int MAX_CAPACITY_BYTES = 5000;
+
   /**
    * Populate the tag information list by using an Ewon Export Block Descriptor and parsing the
    * response.
    *
    * @throws IOException if EDB fails
+   * @throws TagInfoBufferException if line from var_lst exceeds max capacity
    */
   public static synchronized void refreshTagList() throws IOException {
     // Create tagInfoList of size = number of Flexy tags
@@ -94,6 +98,11 @@ public class TagInfoManager {
           && currentByteRead != TagConstants.TAG_EBD_CARRIAGE_RETURN
           && currentByteRead != TagConstants.TAG_EBD_NEW_LINE) {
         receivedBytes.write(currentByteRead);
+        // Maintain a maximum limit for buffer growth
+        if (receivedBytes.size() > MAX_CAPACITY_BYTES) {
+          Logger.LOG_CRITICAL("Line from var_lst exceeds max capacity, throwing IOException.");
+          throw new TagInfoBufferException("Line input exceeds max buffer capacity.");
+        }
       }
     }
 
