@@ -143,9 +143,9 @@ public class TagInfoManager {
    * Parse the specified line from the tag information EBD data generated in {@link
    * #refreshTagList()}. Add the parse tag information to the tag information list.
    *
-   * @param line EBD line bytes
+   * @param line EBD line string
    */
-  private static synchronized void processTagListEBDLine(byte[] line) {
+  private static synchronized void processTagListEBDLine(String line) {
     /*
      * Token indices
      * index 0 - tag ID
@@ -181,14 +181,11 @@ public class TagInfoManager {
     boolean tagHistoricalLoggingEnabled = false;
     boolean tagRealTimeLoggingEnabled = false;
 
-    // Convert line to string
-    String lineFromBytes = new String(line);
-
     // Tokenize line
     final boolean returnDelimiters = false;
     final String delimiter = ";";
     QuoteSafeStringTokenizer quoteSafeStringTokenizer =
-        new QuoteSafeStringTokenizer(lineFromBytes, delimiter, returnDelimiters);
+        new QuoteSafeStringTokenizer(line, delimiter, returnDelimiters);
 
     // Loop through tokens
     while (quoteSafeStringTokenizer.hasMoreElements()
