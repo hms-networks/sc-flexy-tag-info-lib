@@ -6,6 +6,7 @@ import com.ewon.ewonitf.IOManager;
 import com.ewon.ewonitf.SysControlBlock;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.QuoteSafeStringTokenizer;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,9 @@ public class TagInfoManager {
   /** The highest tag ID seen during the previous call to {@link #refreshTagList()}. */
   private static int highestTagIdSeen = TagConstants.UNINIT_INT_VAL;
 
+  /** Initial capacity for byte stream buffer. */
+  private static final int INITIAL_CAPACITY_BYTES = 1000;
+
   /**
    * Populate the tag information list by using an Ewon Export Block Descriptor and parsing the
    * response.
@@ -59,30 +63,27 @@ public class TagInfoManager {
     // Create flag to track reading header
     boolean isHeaderReceived = false;
 
-    // Create array with max capacity of 1000
-    final int maxBytesPerLine = 1000;
-    int receivedBytesInsertIndex = 0;
-    byte[] receivedBytes = new byte[maxBytesPerLine];
+    // Create a byte output stream with an initial capacity
+    ByteArrayOutputStream receivedBytes = new ByteArrayOutputStream(INITIAL_CAPACITY_BYTES);
 
     // Loop through bytes in exporter result
     while (exporter.available() != 0) {
 
       // Read next byte from exporter
-      int currentByteRead = exporter.read();
+      byte currentByteRead = (byte) exporter.read();
 
       // If received new line, process line (disregard if header)
       if (currentByteRead == TagConstants.TAG_EBD_NEW_LINE) {
 
         // Process line if not header, otherwise change header read flag
         if (isHeaderReceived) {
-          processTagListEBDLine(receivedBytes);
+          processTagListEBDLine(receivedBytes.toString());
         } else {
           isHeaderReceived = true;
         }
 
-        // Reached end of line. Reset byte received array
-        receivedBytes = new byte[maxBytesPerLine];
-        receivedBytesInsertIndex = 0;
+        // Reached end of line. Reset byte received buffer
+        receivedBytes.reset();
       }
 
       /*
@@ -92,8 +93,7 @@ public class TagInfoManager {
       if (currentByteRead != TagConstants.TAG_EBD_END_OF_STREAM
           && currentByteRead != TagConstants.TAG_EBD_CARRIAGE_RETURN
           && currentByteRead != TagConstants.TAG_EBD_NEW_LINE) {
-        receivedBytes[receivedBytesInsertIndex] = (byte) currentByteRead;
-        receivedBytesInsertIndex++;
+        receivedBytes.write(currentByteRead);
       }
     }
 
