@@ -70,6 +70,9 @@ public class TagInfoManager {
     // Create a byte output stream with an initial capacity
     ByteArrayOutputStream receivedBytes = new ByteArrayOutputStream(INITIAL_CAPACITY_BYTES);
 
+    // Current line number of tag list
+    int currLineNumber = 0;
+
     // Loop through bytes in exporter result
     while (exporter.available() != 0) {
 
@@ -88,6 +91,9 @@ public class TagInfoManager {
 
         // Reached end of line. Reset byte received buffer
         receivedBytes.reset();
+
+        // Increment line number
+        currLineNumber++;
       }
 
       /*
@@ -100,7 +106,32 @@ public class TagInfoManager {
         receivedBytes.write(currentByteRead);
         // Maintain a maximum limit for buffer growth
         if (receivedBytes.size() > MAX_CAPACITY_BYTES) {
-          Logger.LOG_CRITICAL("Line from var_lst exceeds max capacity, throwing IOException.");
+
+          // Find the tag name of the error line
+          final String delimiter = ";";
+          final int indexName = 1;
+          final boolean returnDelimiters = false;
+          String errorLineTagName = "NotFound";
+          QuoteSafeStringTokenizer quoteSafeStringTokenizer =
+              new QuoteSafeStringTokenizer(receivedBytes.toString(), delimiter, returnDelimiters);
+
+          String currentToken = "";
+          while (quoteSafeStringTokenizer.hasMoreElements()
+              && quoteSafeStringTokenizer.getPrevTokenIndex() < indexName) {
+            currentToken = quoteSafeStringTokenizer.nextToken();
+          }
+
+          if (quoteSafeStringTokenizer.getPrevTokenIndex() == indexName) {
+            errorLineTagName = currentToken;
+          }
+
+          // Log the error line number and tag name
+          Logger.LOG_CRITICAL(
+              "Line "
+                  + currLineNumber
+                  + " for tag name "
+                  + errorLineTagName
+                  + " from var_lst exceeds max capacity, throwing IOException.");
           throw new TagInfoBufferException("Line input exceeds max buffer capacity.");
         }
       }

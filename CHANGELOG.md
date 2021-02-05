@@ -1,5 +1,9 @@
 # Ewon Flexy Tag Info Library Changelog
 
+## v1.2
+### Minor Changes
+- Add var_lst line number and tag name to max capacity error message
+
 ## v1.1
 ### Major Changes
 - Feature: Replaced static buffer for tag info with resizable ByteArrayOutputStream
