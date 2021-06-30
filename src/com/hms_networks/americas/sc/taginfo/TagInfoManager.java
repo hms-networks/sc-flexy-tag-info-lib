@@ -4,6 +4,10 @@ import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.Exporter;
 import com.ewon.ewonitf.IOManager;
 import com.ewon.ewonitf.SysControlBlock;
+import com.hms_networks.americas.sc.fileutils.FileAccessManager;
+import com.hms_networks.americas.sc.json.JSONArray;
+import com.hms_networks.americas.sc.json.JSONException;
+import com.hms_networks.americas.sc.json.JSONObject;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.QuoteSafeStringTokenizer;
 import java.io.ByteArrayOutputStream;
@@ -44,17 +48,29 @@ public class TagInfoManager {
   /** Maximum capacity for byte stream buffer. */
   private static final int MAX_CAPACITY_BYTES = 5000;
 
+  /** Flag to enable int to string tag enums. Defaults to not enabled. */
+  private static boolean enableIntToStringEnums = false;
+
+  /** ArrayList to hold the names of tags that will have int to string enumerations */
+  private static ArrayList intToStringEnumerationTagList;
+
+  /** File path to the int to string enumeration file. */
+  private static final String INT_TO_STRING_ENUMERATION_FILE_NAME = "/usr/EnumerationMapping.json";
+
   /**
    * Populate the tag information list by using an Ewon Export Block Descriptor and parsing the
    * response.
    *
    * @throws IOException if EDB fails
    * @throws TagInfoBufferException if line from var_lst exceeds max capacity
+   * @throws JSONException if int to string enumeration JSON parse fails
    */
-  public static synchronized void refreshTagList() throws IOException {
+  public static synchronized void refreshTagList() throws IOException, JSONException {
     // Create tagInfoList of size = number of Flexy tags
     tagInfoList = new TagInfo[IOManager.getNbTags()];
     tagInfoListInsertIndex = 0;
+
+    getIntStringEnumTags();
 
     /*
      * Create exporter
@@ -184,8 +200,11 @@ public class TagInfoManager {
    * #refreshTagList()}. Add the parse tag information to the tag information list.
    *
    * @param line EBD line string
+   * @throws JSONException if int to string enumeration JSON parse fails
+   * @throws IOException if int to string enumeration file read fails
    */
-  private static synchronized void processTagListEBDLine(String line) {
+  private static synchronized void processTagListEBDLine(String line)
+      throws IOException, JSONException {
     /*
      * Token indices
      * index 0 - tag ID
@@ -282,22 +301,199 @@ public class TagInfoManager {
           TagType tagTypeObj = TagType.getTagTypeFromInt(tagType);
 
           // Type is the last index, form TagInfo object
-          TagInfo currentTagInfo =
-              new TagInfo(
-                  tagId,
-                  tagName,
-                  tagHistoricalLoggingEnabled,
-                  tagRealTimeLoggingEnabled,
-                  tagInGroupA,
-                  tagInGroupB,
-                  tagInGroupC,
-                  tagInGroupD,
-                  tagTypeObj);
-          tagInfoList[tagInfoListInsertIndex] = currentTagInfo;
-          tagInfoListInsertIndex++;
+          createTagInfoObject(
+              tagId,
+              tagName,
+              tagHistoricalLoggingEnabled,
+              tagRealTimeLoggingEnabled,
+              tagInGroupA,
+              tagInGroupB,
+              tagInGroupC,
+              tagInGroupD,
+              tagTypeObj);
           break;
       }
     }
+  }
+
+  /**
+   * Call this function to enable int to string enumerations. Int to string enumeration file will be
+   * expected to exist in Flexy usr directory. The file contents are expected in the following
+   * format: <code>
+   * {
+   * "enumeratedTagList": ["tagName1", "tagName2"],
+   * "tags": {
+   *     "tagName1": [{
+   *         "0": "example string 0 for tagName1"
+   *     }, {
+   *         "6": "example string 6 for tagName1"
+   *     }, {
+   *         "4": "example string 4 for tagName1"
+   *     }],
+   *     "tagName2": [{
+   *         "0": "example string 0 for tagName2"
+   *     }, {
+   *         "1": "example string 1 for tagName2"
+   *     }, {
+   *         "2": "example string 2 for tagName2"
+   *     }]
+   *    }
+   *  }
+   * </code> <img src="../../../../../../example/IntToStringEnumerationExample.PNG" alt="Example int
+   * to string enumeration format">
+   */
+  public static void enableIntToStringEnums() {
+    enableIntToStringEnums = true;
+  }
+
+  /**
+   * Creates a tag info object either with or without the tag int to string enumeration.
+   *
+   * @param tagId the ID of a tag
+   * @param tagName the name of a tag
+   * @param tagHistoricalLoggingEnabled true if historical logging is enabled for the tag
+   * @param tagRealTimeLoggingEnabled true if real time logging is enabled for the tag
+   * @param tagInGroupA true if tag is added to group A
+   * @param tagInGroupB true if tag is added to group B
+   * @param tagInGroupC true if tag is added to group C
+   * @param tagInGroupD true if tag is added to group D
+   * @param tagTypeObj TagType object associated with this tag
+   * @throws JSONException if int to string enumeration JSON parse fails
+   * @throws IOException if in to string enumeration file read fails
+   * @throws NumberFormatException if the key defined in int to string enum mappings is not an
+   *     integer
+   */
+  private static void createTagInfoObject(
+      int tagId,
+      String tagName,
+      boolean tagHistoricalLoggingEnabled,
+      boolean tagRealTimeLoggingEnabled,
+      boolean tagInGroupA,
+      boolean tagInGroupB,
+      boolean tagInGroupC,
+      boolean tagInGroupD,
+      TagType tagTypeObj)
+      throws IOException, JSONException {
+    String[] tagIntToStringMappings = null;
+    boolean enumTag = false;
+    if (enableIntToStringEnums) {
+      for (int tagListIndex = 0;
+          tagListIndex < intToStringEnumerationTagList.size();
+          tagListIndex++) {
+        if (((String) intToStringEnumerationTagList.get(tagListIndex)).equals(tagName)) {
+          enumTag = true;
+          tagIntToStringMappings = getIntStringEnumTagMappings(tagName);
+          break;
+        }
+      }
+    }
+
+    TagInfo currentTagInfo;
+    if (enumTag) {
+      tagTypeObj = TagType.INTEGER_MAPPED_STRING;
+      currentTagInfo =
+          new TagInfoEnumeratedIntToString(
+              tagId,
+              tagName,
+              tagHistoricalLoggingEnabled,
+              tagRealTimeLoggingEnabled,
+              tagInGroupA,
+              tagInGroupB,
+              tagInGroupC,
+              tagInGroupD,
+              tagTypeObj,
+              tagIntToStringMappings);
+    } else {
+      currentTagInfo =
+          new TagInfo(
+              tagId,
+              tagName,
+              tagHistoricalLoggingEnabled,
+              tagRealTimeLoggingEnabled,
+              tagInGroupA,
+              tagInGroupB,
+              tagInGroupC,
+              tagInGroupD,
+              tagTypeObj);
+    }
+    tagInfoList[tagInfoListInsertIndex] = currentTagInfo;
+    tagInfoListInsertIndex++;
+  }
+
+  /**
+   * Reads the enumeration file to get a list of tags that have int to string enumerations and
+   * stores the list. This must be done once at the start of the application and is handled when the
+   * TagInfoList is created.
+   *
+   * @throws IOException if int to string enumeration file read fails
+   * @throws JSONException if int to string enumeration JSON parse fails
+   */
+  private static void getIntStringEnumTags() throws IOException, JSONException {
+    if (enableIntToStringEnums) {
+      ArrayList tagList = new ArrayList();
+      JSONObject allTagIntToStringMappingsJson;
+      JSONArray tagIntToStringMappingsJsonArray;
+      allTagIntToStringMappingsJson =
+          new JSONObject(FileAccessManager.readFileToString(INT_TO_STRING_ENUMERATION_FILE_NAME));
+      tagIntToStringMappingsJsonArray =
+          (JSONArray) allTagIntToStringMappingsJson.get("enumeratedTagList");
+      final int tagListJsonArrayLength = tagIntToStringMappingsJsonArray.length();
+      for (int i = 0; i < tagListJsonArrayLength; i++) {
+        String tagValueAsString = tagIntToStringMappingsJsonArray.getString(i);
+        tagList.add(tagValueAsString);
+      }
+      intToStringEnumerationTagList = tagList;
+    }
+  }
+
+  /**
+   * For a single tag, get the array of string mappings corresponding to the given integer tag.
+   *
+   * @param tagName the name of the Ewon tag
+   * @return an array of string mappings corresponding to the current integer tag
+   * @throws IOException if int to string enumeration file read fails
+   * @throws JSONException if int to string enumeration JSON parse fails
+   * @throws NumberFormatException if the key defined in int to string enum mappings is not an
+   *     integer
+   */
+  private static String[] getIntStringEnumTagMappings(String tagName)
+      throws IOException, JSONException {
+    String[] tagStringMappings = null;
+    JSONObject tagIntToStringMappingsFileJson;
+    JSONObject tagIntToStringMappingsJson;
+    JSONArray tagIntToStringMappingsJsonArray;
+    if (enableIntToStringEnums) {
+      tagIntToStringMappingsFileJson =
+          new JSONObject(FileAccessManager.readFileToString(INT_TO_STRING_ENUMERATION_FILE_NAME));
+      tagIntToStringMappingsJson = (JSONObject) tagIntToStringMappingsFileJson.get("tags");
+      tagIntToStringMappingsJsonArray = (JSONArray) tagIntToStringMappingsJson.get(tagName);
+      final int length = tagIntToStringMappingsJsonArray.length();
+      int biggestIndex = 0;
+
+      /* Int to string enumerations are held in a JSON array of one key/value pair for each index in the array.
+       * To get the key of a key value pair, get the first(only) item returned by JSONObject.names()
+       * for the JSON object index.
+       */
+      final int tagIntToStringEnumStringKeyIndex = 0;
+      for (int jsonArrayIndex = 0; jsonArrayIndex < length; jsonArrayIndex++) {
+        int currentIndex =
+            Integer.parseInt(
+                (String)
+                    ((JSONObject) tagIntToStringMappingsJsonArray.get(jsonArrayIndex))
+                        .names()
+                        .get(tagIntToStringEnumStringKeyIndex));
+
+        biggestIndex = currentIndex > biggestIndex ? currentIndex : biggestIndex;
+      }
+      tagStringMappings = new String[biggestIndex + 1];
+      for (int i = 0; i < length; i++) {
+        JSONObject jsonObject = (JSONObject) tagIntToStringMappingsJsonArray.get(i);
+        String mappingKey = (String) jsonObject.names().get(tagIntToStringEnumStringKeyIndex);
+        String tagValueAsString = (String) jsonObject.get(mappingKey);
+        tagStringMappings[Integer.parseInt(mappingKey)] = tagValueAsString;
+      }
+    }
+    return tagStringMappings;
   }
 
   /**
