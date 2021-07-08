@@ -1,6 +1,9 @@
 # Ewon Flexy Tag Info Library Changelog
 
 ## v1.2
+### Major Changes
+- Feature: Add support for int to string tag enumerations
+
 ### Minor Changes
 - Add var_lst line number and tag name to max capacity error message
 
