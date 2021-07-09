@@ -23,6 +23,9 @@ public class TagType {
   /** Ewon integer value for string type. */
   private static final int STRING_INT = 6;
 
+  /** Ewon integer value for integer mapped string type. */
+  public static final int INTEGER_MAPPED_STRING_INT = 7;
+
   /** Public instance of {@link TagType} representing boolean type. */
   public static final TagType BOOLEAN = new TagType(BOOLEAN_INT);
 
@@ -37,6 +40,9 @@ public class TagType {
 
   /** Public instance of {@link TagType} representing string type. */
   public static final TagType STRING = new TagType(STRING_INT);
+
+  /** Public instance of {@link TagType} representing integer mapped string type. */
+  public static final TagType INTEGER_MAPPED_STRING = new TagType(INTEGER_MAPPED_STRING_INT);
 
   /** Instance tag type integer. */
   private final int typeID;
@@ -71,6 +77,8 @@ public class TagType {
       return DWORD;
     } else if (tagType == STRING_INT) {
       return STRING;
+    } else if (tagType == INTEGER_MAPPED_STRING_INT) {
+      return INTEGER_MAPPED_STRING;
     } else {
       return null;
     }
