@@ -36,6 +36,7 @@ public class TagInfo {
    * @param id tag ID
    * @param name tag name
    * @param historicalLogEnabled boolean if historical logging enabled
+   * @param realTimeLogEnabled boolean if realtime logging enabled
    * @param isInGroupA boolean if tag in group A
    * @param isInGroupB boolean if tag in group B
    * @param isInGroupC boolean if tag in group C
@@ -79,6 +80,7 @@ public class TagInfo {
    * @param id tag ID
    * @param name tag name
    * @param historicalLogEnabled boolean if historical logging enabled
+   * @param realTimeLogEnabled boolean if realtime logging enabled
    * @param tagGroups list of tag groups
    * @param type tag type
    */
