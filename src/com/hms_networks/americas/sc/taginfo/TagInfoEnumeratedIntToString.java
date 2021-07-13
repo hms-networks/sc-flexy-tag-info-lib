@@ -20,6 +20,7 @@ public class TagInfoEnumeratedIntToString extends TagInfo {
    *
    * @param id tag ID
    * @param name tag name
+   * @param description tag description
    * @param historicalLogEnabled boolean if historical logging enabled
    * @param isInGroupA boolean if tag in group A
    * @param isInGroupB boolean if tag in group B
@@ -32,6 +33,7 @@ public class TagInfoEnumeratedIntToString extends TagInfo {
   public TagInfoEnumeratedIntToString(
       int id,
       String name,
+      String description,
       boolean historicalLogEnabled,
       boolean realTimeLogEnabled,
       boolean isInGroupA,
@@ -43,6 +45,7 @@ public class TagInfoEnumeratedIntToString extends TagInfo {
     super(
         id,
         name,
+        description,
         historicalLogEnabled,
         realTimeLogEnabled,
         isInGroupA,
@@ -59,6 +62,7 @@ public class TagInfoEnumeratedIntToString extends TagInfo {
    *
    * @param id tag ID
    * @param name tag name
+   * @param description tag description
    * @param historicalLogEnabled boolean if historical logging enabled
    * @param tagGroups list of tag groups
    * @param type tag type
@@ -68,12 +72,13 @@ public class TagInfoEnumeratedIntToString extends TagInfo {
   public TagInfoEnumeratedIntToString(
       int id,
       String name,
+      String description,
       boolean historicalLogEnabled,
       boolean realTimeLogEnabled,
       ArrayList tagGroups,
       TagType type,
       String[] enumeratedStringValueMapping) {
-    super(id, name, historicalLogEnabled, realTimeLogEnabled, tagGroups, type);
+    super(id, name, description, historicalLogEnabled, realTimeLogEnabled, tagGroups, type);
     this.enumeratedStringValueMapping = enumeratedStringValueMapping;
   }
 
