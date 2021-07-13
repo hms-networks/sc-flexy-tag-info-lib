@@ -27,6 +27,9 @@ public class TagInfo {
   /** Tag name */
   private final String name;
 
+  /** Tag description */
+  private final String description;
+
   /** List of tag groups */
   private final ArrayList tagGroups;
 
@@ -35,6 +38,7 @@ public class TagInfo {
    *
    * @param id tag ID
    * @param name tag name
+   * @param description tag description
    * @param historicalLogEnabled boolean if historical logging enabled
    * @param realTimeLogEnabled boolean if realtime logging enabled
    * @param isInGroupA boolean if tag in group A
@@ -46,6 +50,7 @@ public class TagInfo {
   public TagInfo(
       int id,
       String name,
+      String description,
       boolean historicalLogEnabled,
       boolean realTimeLogEnabled,
       boolean isInGroupA,
@@ -58,6 +63,7 @@ public class TagInfo {
     this.realTimeLogEnabled = realTimeLogEnabled;
     this.id = id;
     this.name = name;
+    this.description = description;
     this.tagGroups = new ArrayList();
 
     if (isInGroupA) {
@@ -79,6 +85,7 @@ public class TagInfo {
    *
    * @param id tag ID
    * @param name tag name
+   * @param description tag description
    * @param historicalLogEnabled boolean if historical logging enabled
    * @param realTimeLogEnabled boolean if realtime logging enabled
    * @param tagGroups list of tag groups
@@ -87,6 +94,7 @@ public class TagInfo {
   public TagInfo(
       int id,
       String name,
+      String description,
       boolean historicalLogEnabled,
       boolean realTimeLogEnabled,
       ArrayList tagGroups,
@@ -96,6 +104,7 @@ public class TagInfo {
     this.realTimeLogEnabled = realTimeLogEnabled;
     this.id = id;
     this.name = name;
+    this.description = description;
     this.tagGroups = tagGroups;
   }
 

@@ -209,6 +209,7 @@ public class TagInfoManager {
      * Token indices
      * index 0 - tag ID
      * index 1 - name
+     * index 2 - description
      * index 8 - historical logging enabled
      * index 15 - real time logging enabled
      * index 25 - in tag group A
@@ -220,6 +221,7 @@ public class TagInfoManager {
      */
     final int indexTagId = 0;
     final int indexName = 1;
+    final int indexDescription = 2;
     final int indexHistoricalLogging = 8;
     final int indexRealTimeLogging = 15;
     final int indexGroupA = 25;
@@ -231,6 +233,7 @@ public class TagInfoManager {
 
     // Tag information
     String tagName = "";
+    String tagDescription = "";
     int tagId = TagConstants.UNINIT_INT_VAL;
     int tagType = TagConstants.UNINIT_INT_VAL;
     boolean tagInGroupA = false;
@@ -276,6 +279,10 @@ public class TagInfoManager {
           // Remove double quotes from returned tag name and store
           tagName = currentToken.substring(1, currentToken.length() - 1);
           break;
+        case indexDescription:
+          // Remove double quotes from returned tag description and store
+          tagDescription = currentToken.substring(1, currentToken.length() - 1);
+          break;
         case indexHistoricalLogging:
           tagHistoricalLoggingEnabled = convertStrToBool(currentToken);
           break;
@@ -304,6 +311,7 @@ public class TagInfoManager {
           createTagInfoObject(
               tagId,
               tagName,
+              tagDescription,
               tagHistoricalLoggingEnabled,
               tagRealTimeLoggingEnabled,
               tagInGroupA,
@@ -351,6 +359,7 @@ public class TagInfoManager {
    *
    * @param tagId the ID of a tag
    * @param tagName the name of a tag
+   * @param tagDescription the description of a tag
    * @param tagHistoricalLoggingEnabled true if historical logging is enabled for the tag
    * @param tagRealTimeLoggingEnabled true if real time logging is enabled for the tag
    * @param tagInGroupA true if tag is added to group A
@@ -366,6 +375,7 @@ public class TagInfoManager {
   private static void createTagInfoObject(
       int tagId,
       String tagName,
+      String tagDescription,
       boolean tagHistoricalLoggingEnabled,
       boolean tagRealTimeLoggingEnabled,
       boolean tagInGroupA,
@@ -395,6 +405,7 @@ public class TagInfoManager {
           new TagInfoEnumeratedIntToString(
               tagId,
               tagName,
+              tagDescription,
               tagHistoricalLoggingEnabled,
               tagRealTimeLoggingEnabled,
               tagInGroupA,
@@ -408,6 +419,7 @@ public class TagInfoManager {
           new TagInfo(
               tagId,
               tagName,
+              tagDescription,
               tagHistoricalLoggingEnabled,
               tagRealTimeLoggingEnabled,
               tagInGroupA,
