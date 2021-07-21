@@ -1,8 +1,12 @@
 # Ewon Flexy Tag Info Library Changelog
 
 ## v1.2
+### Major Changes
+- Add integer mapped string tag type
+- Add tag description to tag info objects
 ### Minor Changes
 - Add var_lst line number and tag name to max capacity error message
+- Corrected improper developer javadoc documentation
 
 ## v1.1
 ### Major Changes
