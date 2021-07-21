@@ -21,3 +21,5 @@ Developer documentation is available in Javadoc format found in the release pack
 
 ## [Dependencies](#table-of-contents)
 1. [sc-flexy-string-lib](https://github.com/hms-networks/sc-flexy-string-lib)
+2. [sc-flexy-file-util-lib](https://github.com/hms-networks/sc-flexy-file-util-lib)
+3. [sc-flexy-json-lib](https://github.com/hms-networks/sc-flexy-json-lib)
