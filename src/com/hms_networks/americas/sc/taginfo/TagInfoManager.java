@@ -535,6 +535,23 @@ public class TagInfoManager {
   }
 
   /**
+   * Gets a {@link TagInfo} object from the tag info array populated by calling {@link
+   * #refreshTagList()}. If this method is called before {@link #refreshTagList()}, an {@link
+   * IllegalStateException} will be thrown.
+   *
+   * @throws IllegalStateException when tag list has not been populated with {@link
+   *     #refreshTagList()}
+   * @throws IndexOutOfBoundsException when (tagId - {@link #lowestTagIdSeen}) is not an index
+   *     within the TagInfo array bounds.
+   * @param tagId the Ewon tag ID
+   * @return {@link TagInfo} object associated with the given tag ID
+   */
+  public static synchronized TagInfo getTagInfoFromTagId(int tagId)
+      throws IllegalStateException, IndexOutOfBoundsException {
+    return ((TagInfo) getTagInfoArray()[tagId - lowestTagIdSeen]);
+  }
+
+  /**
    * Gets the tag info list populated by calling {@link #refreshTagList()}. If this method is called
    * before {@link #refreshTagList()}, an {@link IllegalStateException} will be thrown.
    *
