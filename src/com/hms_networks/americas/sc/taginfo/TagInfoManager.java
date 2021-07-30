@@ -525,9 +525,11 @@ public class TagInfoManager {
    * <p>Warning: TagInfo array has tags indexed by ID with an offset of the lowest tag ID. When
    * accessing elements, the offset must be accounted for ( e.g. index = desiredID - lowestID).
    *
+   * @throws IllegalStateException when tag list has not been populated with {@link
+   *     #refreshTagList()}
    * @return populated tag information array
    */
-  public static synchronized TagInfo[] getTagInfoArray() {
+  public static synchronized TagInfo[] getTagInfoArray() throws IllegalStateException {
     // Verify tag info list has been populated
     if (tagInfoList == null) {
       throw new IllegalStateException(
