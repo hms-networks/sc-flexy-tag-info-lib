@@ -522,6 +522,9 @@ public class TagInfoManager {
    * Gets the tag info array populated by calling {@link #refreshTagList()}. If this method is
    * called before {@link #refreshTagList()}, an {@link IllegalStateException} will be thrown.
    *
+   * <p>Warning: TagInfo array has tags indexed by ID with an offset of the lowest tag ID. When
+   * accessing elements, the offset must be accounted for ( e.g. index = desiredID - lowestID).
+   *
    * @return populated tag information array
    */
   public static synchronized TagInfo[] getTagInfoArray() {
