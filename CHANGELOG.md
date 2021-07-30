@@ -1,5 +1,10 @@
 # Ewon Flexy Tag Info Library Changelog
 
+## v1.2.1
+### Major Changes
+### Minor Changes
+- Add method to get TagInfo object by tag ID
+
 ## v1.2
 ### Major Changes
 - Add integer mapped string tag type
